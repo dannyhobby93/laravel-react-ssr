@@ -1,6 +1,7 @@
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/16/solid";
 
 import { Feature } from "@/types";
+import FeatureActionsDropdown from "./FeatureActionsDropdown";
 import { Link } from "@inertiajs/react";
 import { useState } from "react";
 
@@ -56,6 +57,9 @@ function FeatureItem({
           ) : (
             <p>{feature.description}</p>
           )}
+        </div>
+        <div>
+          <FeatureActionsDropdown feature={feature} />
         </div>
       </div>
     </div>

@@ -31,6 +31,7 @@ export default function Create() {
       }
     >
       <Head title="Create New Feature" />
+
       <div className="mb-4 overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
         <div className="p-6 text-gray-900 dark:text-gray-100 flex gap-8">
           <form onSubmit={createFeature} className="w-full space-y-8">
