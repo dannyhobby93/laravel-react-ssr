@@ -10,6 +10,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Feature extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'description',
+        'user_id'
+    ];
     /**
      * Get all of the upvotes for the Feature
      *

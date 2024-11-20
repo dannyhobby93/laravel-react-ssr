@@ -1,10 +1,17 @@
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/16/solid";
 
 import { Feature } from "@/types";
+import { Link } from "@inertiajs/react";
 import { useState } from "react";
 
-function FeatureItem({ feature }: { feature: Feature }) {
-  const [isExpanded, setExpanded] = useState(false);
+function FeatureItem({
+  feature,
+  singleItem,
+}: {
+  feature: Feature;
+  singleItem?: Boolean;
+}) {
+  const [isExpanded, setExpanded] = useState(singleItem);
 
   const toggleReadMore = () => {
     setExpanded(!isExpanded);
@@ -23,18 +30,32 @@ function FeatureItem({ feature }: { feature: Feature }) {
           </button>
         </div>
         <div className="flex-1">
-          <h2 className="text-2xl mb-2">{feature.name}</h2>
-          <p>
-            {isExpanded
-              ? feature.description
-              : `${feature.description.slice(0, 200)}...`}
-          </p>
-          <button
-            onClick={toggleReadMore}
-            className="text-amber-500 hover:underline"
-          >
-            {isExpanded ? "Read Less" : "Read More"}
-          </button>
+          <h2 className="text-2xl mb-2">
+            {!singleItem ? (
+              <Link href={route("feature.show", feature)}>{feature.name}</Link>
+            ) : (
+              feature.name
+            )}
+          </h2>
+          {feature.description.length > 200 ? (
+            <div>
+              <p>
+                {isExpanded
+                  ? feature.description
+                  : `${(feature.description || "").slice(0, 200)}...`}
+              </p>
+              {!singleItem && (
+                <button
+                  onClick={toggleReadMore}
+                  className="text-amber-500 hover:underline"
+                >
+                  {isExpanded ? "Read Less" : "Read More"}
+                </button>
+              )}
+            </div>
+          ) : (
+            <p>{feature.description}</p>
+          )}
         </div>
       </div>
     </div>
