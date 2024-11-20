@@ -13,8 +13,6 @@ export default function Authenticated({
   const user = usePage().props.auth.user;
   const success = usePage().props.success;
 
-  console.log(success);
-
   const [showingNavigationDropdown, setShowingNavigationDropdown] =
     useState(false);
 
@@ -184,7 +182,7 @@ export default function Authenticated({
                 {success}
               </div>
             )}
-            {children}
+            <div>{children}</div>
           </div>
         </div>
       </main>

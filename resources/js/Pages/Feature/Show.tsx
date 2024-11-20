@@ -1,10 +1,9 @@
+import FeatureItem from "@/Components/FeatureItem";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Feature } from "@/types";
-import FeatureItem from "@/Components/FeatureItem";
 import { Head } from "@inertiajs/react";
 
 export default function Show({ feature }: { feature: Feature }) {
-  console.log(feature);
   return (
     <AuthenticatedLayout
       header={

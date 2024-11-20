@@ -1,9 +1,9 @@
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/16/solid";
+import { Link, useForm } from "@inertiajs/react";
 
 import { Feature } from "@/types";
-import FeatureActionsDropdown from "./FeatureActionsDropdown";
-import { Link } from "@inertiajs/react";
 import { useState } from "react";
+import FeatureActionsDropdown from "./FeatureActionsDropdown";
 
 function FeatureItem({
   feature,
@@ -18,15 +18,61 @@ function FeatureItem({
     setExpanded(!isExpanded);
   };
 
+  const upvoteForm = useForm({
+    upvote: true,
+  });
+
+  const downvoteForm = useForm({
+    upvote: false,
+  });
+
+  const upvoteDownvote = (upvote: boolean) => {
+    if (
+      (feature.user_has_upvoted && upvote) ||
+      (feature.user_has_downvoted && !upvote)
+    ) {
+      upvoteForm.delete(route("upvote.destroy", feature.id), {
+        preserveScroll: true,
+      });
+    } else {
+      let form = null;
+
+      if (upvote) {
+        form = upvoteForm;
+      } else {
+        form = downvoteForm;
+      }
+
+      form.post(route("upvote.store", feature.id), {
+        preserveScroll: true,
+      });
+    }
+  };
+
   return (
     <div className="mb-4 overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
       <div className="p-6 text-gray-900 dark:text-gray-100 flex gap-8">
         <div className="flex flex-col items-center">
-          <button>
+          <button
+            onClick={() => upvoteDownvote(true)}
+            className={feature.user_has_upvoted ? "text-amber-600" : ""}
+          >
             <ChevronUpIcon className="size-12" />
           </button>
-          <span className="text-2xl font-semibold">12</span>
-          <button>
+          <span
+            className={
+              `text-2xl font-semibold ` +
+              (feature.user_has_upvoted || feature.user_has_downvoted
+                ? "text-amber-600"
+                : "")
+            }
+          >
+            {feature.upvote_count}
+          </span>
+          <button
+            onClick={() => upvoteDownvote(false)}
+            className={feature.user_has_downvoted ? "text-amber-600" : ""}
+          >
             <ChevronDownIcon className="size-12" />
           </button>
         </div>
