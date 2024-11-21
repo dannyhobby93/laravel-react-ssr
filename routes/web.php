@@ -1,5 +1,6 @@
 <?php
 
+use App\Enum\PermissionsEnum;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
@@ -10,32 +11,40 @@ use App\Http\Controllers\ProfileController;
 
 Route::redirect('/', '/dashboard');
 
-
-
 Route::middleware('auth')->group(function () {
+    // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    // Verified Users
     Route::middleware(['verified'])->group(function () {
-
+        // Dashboard
         Route::get('/dashboard', function () {
             return Inertia::render('Dashboard');
         })->name('dashboard');
 
-        Route::resource('/feature', FeatureController::class);
+        // Feature
+        Route::resource('/feature', FeatureController::class)
+            ->except('index', 'show')
+            ->middleware('can:' . PermissionsEnum::ManageFeatures->value);
+        Route::resource('/feature', FeatureController::class)
+            ->only('index', 'show');
 
+        // Upvote
         Route::post('/feature/{feature}/upvote', [UpvoteController::class, 'store'])
             ->name('upvote.store');
-
         Route::delete('/upvote/{feature}', [UpvoteController::class, 'destroy'])
             ->name('upvote.destroy');
 
+        // Comments
         Route::post('/feature/{feature}/comments', [CommentController::class, 'store'])
-            ->name('comment.store');
-
+            ->name('comment.store')
+            ->middleware('can:' . PermissionsEnum::ManageComments->value);
         Route::delete('/comment/{comment}', [CommentController::class, 'destroy'])
-            ->name('comment.destroy');
+            ->name('comment.destroy')
+            ->middleware('can:' . PermissionsEnum::ManageComments->value);
+        ;
     });
 });
 

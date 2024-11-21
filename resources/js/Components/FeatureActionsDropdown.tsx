@@ -1,8 +1,14 @@
 import Dropdown from "./Dropdown";
 import { EllipsisHorizontalCircleIcon } from "@heroicons/react/16/solid";
 import { Feature } from "@/types";
+import { can } from "@/helpers";
+import { usePage } from "@inertiajs/react";
 
 function FeatureActionsDropdown({ feature }: { feature: Feature }) {
+  const user = usePage().props.auth.user;
+
+  if (!can(user, "manage_features")) return;
+
   return (
     <Dropdown>
       <Dropdown.Trigger>

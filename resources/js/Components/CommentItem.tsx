@@ -1,9 +1,11 @@
 import { TrashIcon, UserIcon } from "@heroicons/react/16/solid";
+import { useForm, usePage } from "@inertiajs/react";
 
 import { Comment } from "@/types";
-import { useForm } from "@inertiajs/react";
+import { can } from "@/helpers";
 
 function CommentItem({ comment }: { comment: Comment }) {
+  const user = usePage().props.auth.user;
   const form = useForm();
 
   const deleteComment = () => {
@@ -27,11 +29,13 @@ function CommentItem({ comment }: { comment: Comment }) {
         </h3>
         <div className="italic mt-1">{comment.comment}</div>
       </div>
-      <div className="flex items-center py-2 px-6">
-        <button onClick={deleteComment}>
-          <TrashIcon className="size-6" />
-        </button>
-      </div>
+      {can(user, "manage_comments") && user.id === comment.user.id && (
+        <div className="flex items-center py-2 px-6">
+          <button onClick={deleteComment}>
+            <TrashIcon className="size-4" />
+          </button>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,15 +1,18 @@
 import { Feature, PaginatedData } from "@/types";
-import { Head, Link } from "@inertiajs/react";
+import { Head, Link, usePage } from "@inertiajs/react";
 
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import FeatureItem from "@/Components/FeatureItem";
 import PrimaryButton from "@/Components/PrimaryButton";
+import { can } from "@/helpers";
 
 export default function Index({
   features,
 }: {
   features: PaginatedData<Feature>;
 }) {
+  const user = usePage().props.auth.user;
+
   return (
     <AuthenticatedLayout
       header={
@@ -20,9 +23,11 @@ export default function Index({
     >
       <Head title="Features" />
 
-      <Link href={route("feature.create")}>
-        <PrimaryButton className="mb-8">Create new Feature</PrimaryButton>
-      </Link>
+      {can(user, "manage_features") && (
+        <Link href={route("feature.create")}>
+          <PrimaryButton className="mb-8">Create new Feature</PrimaryButton>
+        </Link>
+      )}
 
       {features.data.map((feature) => (
         <FeatureItem feature={feature} key={feature.id} />
