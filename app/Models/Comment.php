@@ -7,6 +7,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Comment extends Model
 {
+    protected $fillable = [
+        'comment',
+        'feature_id',
+        'user_id'
+    ];
+
     /**
      * Get the user that owns the Comment
      *

@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Upvote;
 use Inertia\Inertia;
+use App\Models\Upvote;
 use App\Models\Feature;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\FeatureResource;
+use App\Http\Resources\FeatureListResource;
 
 class FeatureController extends Controller
 {
@@ -37,7 +38,7 @@ class FeatureController extends Controller
         return Inertia::render(
             'Feature/Index',
             [
-                'features' => FeatureResource::collection($features)
+                'features' => FeatureListResource::collection($features)
             ]
         );
     }

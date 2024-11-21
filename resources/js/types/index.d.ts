@@ -18,6 +18,14 @@ export type Feature = {
   upvote_count: number;
   user_has_upvoted: boolean;
   user_has_downvoted: boolean;
+  comments: Comment[];
+};
+
+export type Comment = {
+  id: number;
+  comment: string;
+  created_at: string;
+  user: User;
 };
 
 export type PaginatedData<T = any> = {
