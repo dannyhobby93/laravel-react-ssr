@@ -1,9 +1,11 @@
 <?php
 
-use App\Enum\PermissionsEnum;
 use Inertia\Inertia;
+use App\Enum\RolesEnum;
+use App\Enum\PermissionsEnum;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\UpvoteController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FeatureController;
@@ -44,7 +46,16 @@ Route::middleware('auth')->group(function () {
         Route::delete('/comment/{comment}', [CommentController::class, 'destroy'])
             ->name('comment.destroy')
             ->middleware('can:' . PermissionsEnum::ManageComments->value);
-        ;
+
+        Route::middleware(['role:' . RolesEnum::Admin->value])
+            ->group(function () {
+                Route::get('/users', [UserController::class, 'index'])
+                    ->name('user.index');
+                Route::get('/users/{user}/edit', [UserController::class, 'edit'])
+                    ->name('user.edit');
+                Route::put('/users/{user}/edit', [UserController::class, 'update'])
+                    ->name('user.update');
+            });
     });
 });
 
