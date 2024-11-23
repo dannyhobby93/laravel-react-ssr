@@ -13,6 +13,8 @@ export default function Index({
 }) {
   const user = usePage().props.auth.user;
 
+  // usePoll(3000);
+
   return (
     <AuthenticatedLayout
       header={

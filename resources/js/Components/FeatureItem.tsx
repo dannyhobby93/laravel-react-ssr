@@ -1,17 +1,19 @@
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/16/solid";
+import { Comment, Feature } from "@/types";
 import { Link, useForm } from "@inertiajs/react";
 
 import CommentForm from "./CommentForm";
 import CommentItem from "./CommentItem";
-import { Feature } from "@/types";
 import FeatureActionsDropdown from "./FeatureActionsDropdown";
 import { useState } from "react";
 
 function FeatureItem({
   feature,
+  comments,
   singleItem,
 }: {
   feature: Feature;
+  comments?: Comment[];
   singleItem?: Boolean;
 }) {
   const [isExpanded, setExpanded] = useState(singleItem);
@@ -81,7 +83,12 @@ function FeatureItem({
         <div className="flex-1">
           <h2 className="text-2xl mb-2">
             {!singleItem ? (
-              <Link href={route("feature.show", feature)}>{feature.name}</Link>
+              <Link
+                prefetch={["hover", "click"]}
+                href={route("feature.show", feature)}
+              >
+                {feature.name}
+              </Link>
             ) : (
               feature.name
             )}
@@ -105,10 +112,10 @@ function FeatureItem({
           ) : (
             <p>{feature.description}</p>
           )}
-          {singleItem && (
+          {singleItem && comments && (
             <div className="mt-8">
               <CommentForm feature={feature} />
-              {feature.comments.map((comment) => (
+              {comments.map((comment) => (
                 <CommentItem comment={comment} key={comment.id} />
               ))}
             </div>

@@ -1,9 +1,16 @@
-import FeatureItem from "@/Components/FeatureItem";
+import { Comment, Feature } from "@/types";
+
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Feature } from "@/types";
+import FeatureItem from "@/Components/FeatureItem";
 import { Head } from "@inertiajs/react";
 
-export default function Show({ feature }: { feature: Feature }) {
+export default function Show({
+  feature,
+  comments,
+}: {
+  feature: Feature;
+  comments: Comment[];
+}) {
   return (
     <AuthenticatedLayout
       header={
@@ -13,7 +20,7 @@ export default function Show({ feature }: { feature: Feature }) {
       }
     >
       <Head title={"Feature" + feature.name} />
-      <FeatureItem feature={feature} singleItem={true} />
+      <FeatureItem feature={feature} comments={comments} singleItem={true} />
     </AuthenticatedLayout>
   );
 }

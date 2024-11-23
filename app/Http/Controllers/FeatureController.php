@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use Inertia\Inertia;
 use App\Models\Upvote;
 use App\Models\Feature;
@@ -85,7 +86,15 @@ class FeatureController extends Controller
             ->exists();
 
         return Inertia::render('Feature/Show', [
-            'feature' => new FeatureResource($feature)
+            'feature' => new FeatureResource($feature),
+            'comments' => $feature->comments->map(function ($comment) {
+                return [
+                    'id' => $comment->id,
+                    'comment' => $comment->comment,
+                    'created_at' => $comment->created_at->format("Y-m-d H:i:s"),
+                    'user' => new UserResource($comment->user)
+                ];
+            })
         ]);
     }
 
